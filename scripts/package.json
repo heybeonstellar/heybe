@@ -3,10 +3,13 @@
   "private": true,
   "type": "module",
   "description": "Testnet flows that produce the evidence in EVIDENCE.md",
-  "engines": { "node": ">=22.18" },
+  "engines": {
+    "node": ">=22.18"
+  },
   "scripts": {
     "flows": "node flows/core.ts",
-    "flow:8004": "node flows/stellar-8004.ts"
+    "flow:8004": "node flows/stellar-8004.ts",
+    "evidence": "node evidence.ts"
   },
   "dependencies": {
     "@stellar/stellar-sdk": "17.4.0"
