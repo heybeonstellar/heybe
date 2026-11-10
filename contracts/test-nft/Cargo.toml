@@ -1,0 +1,19 @@
+[package]
+name = "heybe-test-nft"
+description = "Test NFT for Heybe demos: OpenZeppelin SEP-50 NFT with open minting."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+doctest = false
+
+[dependencies]
+soroban-sdk = { workspace = true }
+stellar-tokens = { workspace = true }
+
+[dev-dependencies]
+soroban-sdk = { workspace = true, features = ["testutils"] }

@@ -1,0 +1,19 @@
+[package]
+name = "heybe-account"
+description = "Heybe token-bound account: a Soroban account controlled by the current owner of one NFT."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+doctest = false
+
+[dependencies]
+soroban-sdk = { workspace = true }
+
+[dev-dependencies]
+soroban-sdk = { workspace = true, features = ["testutils"] }
+heybe-test-nft = { path = "../test-nft" }
