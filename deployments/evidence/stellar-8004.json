@@ -1,0 +1,98 @@
+{
+  "flow": "stellar-8004",
+  "recordedAt": "2026-11-10T10:33:09.445Z",
+  "deployments": {
+    "network": "testnet",
+    "rpcUrl": "https://soroban-testnet.stellar.org",
+    "networkPassphrase": "Test SDF Network ; September 2015",
+    "deployedAt": "2026-11-10T10:19:47Z",
+    "deployer": "GCQC256XBVYAQEFQTO7ZJRXRODXDZ3KBSELEDNZC7EZTXYPGHW4HQPIU",
+    "accountWasmHash": "2f8d6e81818e6b82e367d072b1803e97ea239e8c11722b770c6fe3278aabd4b0",
+    "registry": "CA6H2DQVL6RN4UBAHHWZQASWDUIYA4O3CUZIUKD63D4QIIEUHGJUX4QO",
+    "testNft": "CDVWUFUPRRCPICQJD2FBJMXXZRNMZWMHSKCE7QOTCFMFW2OQYV5OQN3V",
+    "xlmSac": "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC",
+    "stellar8004IdentityRegistry": "CDE3K4COIAGWNNJQQLL26SYI3KBJF5FUDHXG5FA6GYDJCG7T5V7FIWZH"
+  },
+  "context": {
+    "agentId": 168,
+    "account": "CC2XNGQGO4TED5JKT5XBLJZWVN4367URPKP3MZI2AZCAWLWDTTYICOLD",
+    "accountExplorer": "https://stellar.expert/explorer/testnet/contract/CC2XNGQGO4TED5JKT5XBLJZWVN4367URPKP3MZI2AZCAWLWDTTYICOLD",
+    "identityRegistry": "CDE3K4COIAGWNNJQQLL26SYI3KBJF5FUDHXG5FA6GYDJCG7T5V7FIWZH"
+  },
+  "steps": [
+    {
+      "step": "register_agent",
+      "claim": "Ali registers a test agent on stellar-8004 and receives agent NFT #168",
+      "hash": "66a2262634c0bf31e717f6d7505b93ae316a58187f4017d00037a848a5b2aeb2",
+      "explorer": "https://stellar.expert/explorer/testnet/tx/66a2262634c0bf31e717f6d7505b93ae316a58187f4017d00037a848a5b2aeb2"
+    },
+    {
+      "step": "create_account",
+      "claim": "Ali creates the Heybe account for the agent NFT",
+      "hash": "75097cd9ab81d90df6d1e10428dbccc33ce622e056d48508363599bb166b8dca",
+      "explorer": "https://stellar.expert/explorer/testnet/tx/75097cd9ab81d90df6d1e10428dbccc33ce622e056d48508363599bb166b8dca"
+    },
+    {
+      "step": "fund_account",
+      "claim": "Ali funds the agent's account with 10 XLM",
+      "hash": "626cb823e020a5cf533d4fbb9ef1085792dba6bffc5962823b578e6de92f5ee7",
+      "explorer": "https://stellar.expert/explorer/testnet/tx/626cb823e020a5cf533d4fbb9ef1085792dba6bffc5962823b578e6de92f5ee7"
+    },
+    {
+      "step": "bind_agent_wallet",
+      "claim": "Through execute, Ali calls set_agent_wallet(Ali, agent, account). The account authorizes as new_wallet",
+      "hash": "1614be5f527109cbc8ab6dfbf63a488f71400b8b2768d683cd30b0f72b6260ca",
+      "explorer": "https://stellar.expert/explorer/testnet/tx/1614be5f527109cbc8ab6dfbf63a488f71400b8b2768d683cd30b0f72b6260ca"
+    },
+    {
+      "step": "agent_wallet_is_account",
+      "claim": "stellar-8004 now reports the Heybe account as the agent wallet",
+      "result": "CC2XNGQGO4TED5JKT5XBLJZWVN4367URPKP3MZI2AZCAWLWDTTYICOLD"
+    },
+    {
+      "step": "transfer_agent",
+      "claim": "Ali transfers the agent NFT to Ayşe",
+      "hash": "da8b35475325e249a5a52bc3fd968b7f88f0eb6667bd73e24c6323970179d473",
+      "explorer": "https://stellar.expert/explorer/testnet/tx/da8b35475325e249a5a52bc3fd968b7f88f0eb6667bd73e24c6323970179d473"
+    },
+    {
+      "step": "registry_clears_wallet",
+      "claim": "As designed, stellar-8004 clears agentWallet on transfer",
+      "result": "none"
+    },
+    {
+      "step": "account_follows_agent",
+      "claim": "The Heybe account now reports Ayşe as owner. Its funds stayed with the agent",
+      "result": "GB4OK2UJHOIYHEKZCDKLTTXWHBH3TPTZ7HGDVS3GNOH2DNM3ONWXOFGH"
+    },
+    {
+      "step": "new_owner_spends",
+      "claim": "Ayşe pays 3 XLM from the agent's account",
+      "hash": "d8d49782017bfd1ebc50bc73183e5a554588aa9607325520cc97b5d33d9bd5fc",
+      "explorer": "https://stellar.expert/explorer/testnet/tx/d8d49782017bfd1ebc50bc73183e5a554588aa9607325520cc97b5d33d9bd5fc"
+    },
+    {
+      "step": "rebind_agent_wallet",
+      "claim": "Ayşe re-binds the same account as the agent wallet in one call",
+      "hash": "66fa1e8af35e618e04e61a59ca1a5a3f63fc424901cbb04f0884ac0d21830817",
+      "explorer": "https://stellar.expert/explorer/testnet/tx/66fa1e8af35e618e04e61a59ca1a5a3f63fc424901cbb04f0884ac0d21830817"
+    },
+    {
+      "step": "agent_wallet_rebound",
+      "claim": "stellar-8004 reports the same Heybe account again",
+      "result": "CC2XNGQGO4TED5JKT5XBLJZWVN4367URPKP3MZI2AZCAWLWDTTYICOLD"
+    },
+    {
+      "step": "previous_owner_rejected",
+      "claim": "Ali signs execute on the agent's account. The transaction fails on chain",
+      "hash": "3801116a12a5d68914667a8aa2ec352b3a2c6f7db8216981bdfee252e0fdfa3b",
+      "explorer": "https://stellar.expert/explorer/testnet/tx/3801116a12a5d68914667a8aa2ec352b3a2c6f7db8216981bdfee252e0fdfa3b",
+      "result": "failed as expected; required signer: GB4OK2UJHOIYHEKZCDKLTTXWHBH3TPTZ7HGDVS3GNOH2DNM3ONWXOFGH"
+    },
+    {
+      "step": "final_balance",
+      "claim": "Agent account balance (10 - 3)",
+      "result": "7 XLM"
+    }
+  ]
+}
