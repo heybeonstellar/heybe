@@ -1,6 +1,6 @@
-# Contract interface (draft v0)
+# Contract interface (v0)
 
-> Draft. This is the target interface for the first implementation. Names and error codes may change before the contracts are tagged. Token ids are `u32`, matching OpenZeppelin's SEP-50 implementation.
+> Implemented in `contracts/` and deployed on testnet ([EVIDENCE.md](../EVIDENCE.md)). Not yet tagged or audited, so names and error codes may still change. Token ids are `u32`, matching OpenZeppelin's SEP-50 implementation.
 
 ## Registry
 
@@ -16,7 +16,7 @@ pub trait HeybeRegistry {
     /// Deploys the account for an NFT and returns its address.
     /// Permissionless: anyone may call it. Creating an account grants no control.
     /// Errors: AlreadyCreated.
-    fn create_account(env: Env, nft: Address, token_id: u32) -> Address;
+    fn create_account(env: Env, nft: Address, token_id: u32) -> Result<Address, RegistryError>;
 
     /// True once create_account has succeeded for this NFT.
     fn is_created(env: Env, nft: Address, token_id: u32) -> bool;
@@ -65,13 +65,13 @@ pub trait HeybeAccount {
     /// Path A. Calls `func` on `target` with `args` as this account.
     /// Requires the current owner's auth.
     /// Errors: Locked, SelfOwned, SelfTransferBlocked.
-    fn execute(env: Env, target: Address, func: Symbol, args: Vec<Val>) -> Val;
+    fn execute(env: Env, target: Address, func: Symbol, args: Vec<Val>) -> Result<Val, AccountError>;
 
     /// Locks the account until `until_ledger`. While locked, execute and
     /// __check_auth fail. A lock can be extended but never shortened.
     /// Requires the current owner's auth.
     /// Errors: SelfOwned, InvalidLock.
-    fn lock(env: Env, until_ledger: u32);
+    fn lock(env: Env, until_ledger: u32) -> Result<(), AccountError>;
 
     /// Extends the account's instance TTL. Anyone may call it.
     fn extend_ttl(env: Env);

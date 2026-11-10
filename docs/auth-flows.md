@@ -84,14 +84,17 @@ CAP-71 notes that simulation does not enter `__check_auth`, so delegated auth st
 
 The demo app and SDK wrap this in one helper.
 
-## Open questions (tested on day 2)
+## Spike results (Nov 10, 2026)
 
-These questions shape the demo and are not yet verified:
+| Question | Result | Evidence |
+|---|---|---|
+| Does the Stellar Asset Contract accept a transfer to the account address before `create_account` runs? | **Yes.** The balance is there once the account is deployed, and the account can spend it. | Test `funds_sent_before_deployment_arrive`; testnet step `fund_before_deploy` in [EVIDENCE.md](../EVIDENCE.md) |
+| Does `set_auths` with `AddressWithDelegates` exercise the full Path B in `soroban-sdk` 28 tests, including a storage write inside `__check_auth`? | **Yes.** `__check_auth` runs, the `state` write persists, and non-owner, extra and missing delegates are rejected. | `path_b_*` tests in `contracts/account/src/test.rs` and `contracts/registry/src/test.rs` |
+| Can `@stellar/stellar-sdk` 17.4 build an `AddressWithDelegates` entry that a `G...` key signs and testnet accepts? | **Yes.** The SDK ships `buildWithDelegatesEntry` and `authorizeEntry(..., forAddress)`. The on-chain transaction carries `addressWithDelegates` credentials for the account, with the owner's delegate signature. | Testnet step `path_b_delegated`; helper `invokeDelegated` in `scripts/lib/heybe.ts` |
+| Can Freighter's `signAuthEntry` produce the delegate signature? | **Not tested yet.** It needs a browser and is part of the web demo. | — |
 
-1. **Funding before deployment.** Does the Stellar Asset Contract accept a transfer to the account address before `create_account` runs?
-   - If not, the demo deploys the account first. Users see no difference.
-2. **Delegation in tests.** Does `set_auths` with `AddressWithDelegates` exercise the full Path B in `soroban-sdk` 28 test utilities, including a storage write (the `state` counter) inside `__check_auth`?
-3. **Client signing.** Can `@stellar/stellar-sdk` 17.4 build an `AddressWithDelegates` entry that a `G...` key signs and testnet accepts? Can Freighter's `signAuthEntry` produce the delegate signature?
-   - If Freighter cannot, the demo uses Path A and Path B is proven by tests and scripts.
+Notes from the spikes:
 
-Results will be recorded here.
+- `soroban-sdk` 28 only builds contract wasm through `stellar contract build` (stellar-cli 25.2+). Plain `cargo build --target wasm32v1-none` fails by design.
+- Simulation in recording mode does not fail when a required signature is missing. It lists the signature instead. The rejection scripts use that to submit transactions that fail on chain, which leaves public proof.
+- During `execute`, a contract the account calls directly gets the account's authorization for free. A contract deeper in the call tree that requires the account's auth is not covered by Path A. That case needs a CAP-71 entry for the account and is untested.

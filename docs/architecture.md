@@ -1,6 +1,6 @@
 # Architecture
 
-> Draft. Written before implementation; it changes as the contracts land.
+> Describes the v0 contracts in `contracts/`, deployed on testnet.
 
 ## Components
 
@@ -87,7 +87,7 @@ sequenceDiagram
 | Contract | Storage | Contents |
 |---|---|---|
 | Registry | instance | account wasm hash |
-| Registry | persistent | `Created(nft, id)` marker per account |
+| Registry | persistent | `Created(nft, id)` → account address |
 | Account | instance | `nft`, `token_id`, `state` counter, `locked_until` |
 
 The account extends its instance TTL whenever it is used, and anyone can call `extend_ttl`. Archived entries can be restored, so assets are never lost to archival. Restoring costs a fee.

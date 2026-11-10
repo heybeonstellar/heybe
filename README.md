@@ -2,7 +2,9 @@
 
 **Token-bound accounts for Soroban.** Every NFT on Stellar gets its own smart-contract account, and whoever holds the NFT controls that account. When the NFT changes hands, everything inside the account (XLM, USDC, other tokens, other NFTs) goes with it.
 
-> Status: **design phase.** No contracts are deployed yet. This repository starts with the design documents. Contracts, tests, and a testnet demo follow over the next two weeks (see [Roadmap](docs/roadmap.md)).
+> Status: **running on Stellar testnet.** The registry and account contracts are deployed. Both authorization paths, including CAP-71 delegation with a real wallet key, are proven with public transactions in [EVIDENCE.md](EVIDENCE.md). A web demo is next (see [Roadmap](docs/roadmap.md)). Testnet only: not audited, not on mainnet.
+
+**Example: an AI agent whose money moves with it.** A stellar-8004 agent NFT gets a Heybe account. The account is bound as the agent's wallet, and the agent is transferred. The new owner then spends and re-binds the same account, and the previous owner is rejected on chain. [See the transactions](EVIDENCE.md#stellar-8004-flow-an-agent-nft-with-its-own-wallet).
 
 ## Why
 
@@ -47,6 +49,7 @@ Details: [Architecture](docs/architecture.md) · [Auth flows](docs/auth-flows.md
 
 ## Documents
 
+- [Evidence](EVIDENCE.md): every claim with its testnet transaction
 - [Overview](docs/overview.md): problem, solution, use cases
 - [Architecture](docs/architecture.md): components and how they connect
 - [Interface](docs/interface.md): contract functions, errors, events (draft)
@@ -55,11 +58,49 @@ Details: [Architecture](docs/architecture.md) · [Auth flows](docs/auth-flows.md
 - [Demo](docs/demo.md): what the testnet demo will show
 - [Roadmap](docs/roadmap.md): pre-phase, next sprint, later
 
-## Tech stack (planned)
+## Testnet deployment
 
-- Contracts: Rust, `soroban-sdk` 28.x, OpenZeppelin `stellar-tokens` 0.8.x (test NFT)
+| Contract | Address |
+|---|---|
+| Registry | [`CA6H2DQV…UX4QO`](https://stellar.expert/explorer/testnet/contract/CA6H2DQVL6RN4UBAHHWZQASWDUIYA4O3CUZIUKD63D4QIIEUHGJUX4QO) |
+| Test NFT | [`CDVWUFUP…OQN3V`](https://stellar.expert/explorer/testnet/contract/CDVWUFUPRRCPICQJD2FBJMXXZRNMZWMHSKCE7QOTCFMFW2OQYV5OQN3V) |
+| Account wasm hash | `2f8d6e81…aabd4b0` |
+
+Full ids are in [`deployments/testnet.json`](deployments/testnet.json).
+
+## Repository layout
+
+| Path | What it is |
+|---|---|
+| `contracts/account` | The Heybe account contract (Path A `execute`, Path B `__check_auth`, lock, guards) |
+| `contracts/registry` | Deterministic addresses and permissionless deployment |
+| `contracts/test-nft` | OpenZeppelin SEP-50 NFT with open minting, for tests and the demo |
+| `scripts/` | Testnet deploy script and the flows that produce [EVIDENCE.md](EVIDENCE.md) |
+| `deployments/` | Testnet contract ids and recorded evidence |
+| `docs/` | Design documents |
+
+## Run it yourself
+
+Requires Rust with the `wasm32v1-none` target, `stellar` CLI 28+, and Node 22.18+.
+
+```bash
+# build and test the contracts
+cd contracts && stellar contract build && cargo test
+
+# deploy your own copy to testnet (creates and funds a heybe-deployer identity)
+scripts/deploy-testnet.sh
+
+# run the scripted flows (needs funded identities heybe-ali, heybe-ayse, heybe-bob)
+for k in heybe-ali heybe-ayse heybe-bob; do stellar keys generate $k --network testnet --fund; done
+cd scripts && npm install && npm run flows && npm run flow:8004 && npm run evidence
+```
+
+## Tech stack
+
+- Contracts: Rust, `soroban-sdk` 28.0, OpenZeppelin `stellar-tokens` 0.8 (test NFT)
 - Tooling: `stellar` CLI 28, `cargo test` with Soroban test utilities, GitHub Actions
-- Demo app: TypeScript, React + Vite, `@stellar/stellar-sdk` 17.x, Freighter via Stellar Wallets Kit
+- Scripts: TypeScript on Node (built-in type stripping), `@stellar/stellar-sdk` 17.4
+- Demo app (next): TypeScript, React + Vite, Freighter via Stellar Wallets Kit
 - Network: Stellar testnet
 
 ## License

@@ -4,24 +4,26 @@
 
 ### Week 1: foundation
 
-- [ ] Design documents (this folder)
-- [ ] Spikes for the open questions in [auth flows](auth-flows.md)
-- [ ] Registry and account contracts
-- [ ] OpenZeppelin-based test NFT
-- [ ] Unit and end-to-end tests with real auth entries. Cases:
+- [x] Design documents (this folder)
+- [x] Spikes for the open questions. Results are in [auth flows](auth-flows.md#spike-results-nov-10-2026).
+- [x] Registry and account contracts
+- [x] OpenZeppelin-based test NFT
+- [x] Unit and end-to-end tests with real auth entries (26 tests). Covered:
   - control moves with the NFT
-  - the old owner is rejected
+  - the previous owner and strangers are rejected
   - XLM balance
   - lock
   - self-ownership and self-transfer guards
+  - burned NFT
   - Path B rejects anyone but the owner
-- [ ] CI green
+- [x] CI: wasm build with stellar CLI, tests, clippy
 
 ### Week 2: demo and feedback
 
-- [ ] Testnet deployment and scripted flows. Every hash goes in `EVIDENCE.md`.
-- [ ] stellar-8004 agent wallet flow on testnet
-- [ ] Web demo (Path A with Freighter; Path B if the client spike succeeds)
+- [x] Testnet deployment and scripted flows. Hashes are in [EVIDENCE.md](../EVIDENCE.md).
+- [x] stellar-8004 agent wallet flow on testnet
+- [x] Path B with a real G-key CAP-71 delegate signature on testnet
+- [ ] Web demo (Path A with Freighter; Path B if Freighter signs delegate entries)
 - [ ] Demo video
 - [ ] Design discussion on stellar-protocol GitHub Discussions
 - [ ] Feedback round with the Stellar Türkiye chapter
@@ -31,7 +33,7 @@
 - **TypeScript SDK.**
   - Computes account addresses off chain.
   - Creates accounts and runs `execute`.
-  - Builds CAP-71 delegated auth entries, including the two-pass simulation.
+  - Builds CAP-71 delegated auth entries. `scripts/lib/heybe.ts` is the starting point.
 - **Account viewer.**
   - Shows what is inside the account of any SEP-50 NFT.
   - Includes an integration proposal for the stellar-8004 explorer.
@@ -40,6 +42,7 @@
   - Marketplace-side `state` checks.
   - Path B in the UI.
   - `u128` token id support.
+  - Pre-authorizing deeper calls during `execute`.
 
 ## Later
 
