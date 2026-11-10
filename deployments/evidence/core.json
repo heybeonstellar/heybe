@@ -1,0 +1,128 @@
+{
+  "flow": "core",
+  "recordedAt": "2026-11-10T10:27:33.933Z",
+  "deployments": {
+    "network": "testnet",
+    "rpcUrl": "https://soroban-testnet.stellar.org",
+    "networkPassphrase": "Test SDF Network ; September 2015",
+    "deployedAt": "2026-11-10T10:19:47Z",
+    "deployer": "GCQC256XBVYAQEFQTO7ZJRXRODXDZ3KBSELEDNZC7EZTXYPGHW4HQPIU",
+    "accountWasmHash": "2f8d6e81818e6b82e367d072b1803e97ea239e8c11722b770c6fe3278aabd4b0",
+    "registry": "CA6H2DQVL6RN4UBAHHWZQASWDUIYA4O3CUZIUKD63D4QIIEUHGJUX4QO",
+    "testNft": "CDVWUFUPRRCPICQJD2FBJMXXZRNMZWMHSKCE7QOTCFMFW2OQYV5OQN3V",
+    "xlmSac": "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC",
+    "stellar8004IdentityRegistry": "CDE3K4COIAGWNNJQQLL26SYI3KBJF5FUDHXG5FA6GYDJCG7T5V7FIWZH"
+  },
+  "context": {
+    "tokenId": 0,
+    "account": "CAOG3AV5UGTIWJK5THLHCX74NNS5J7ZKK3TIXCGYFO4ELZUD6PCTIXPG",
+    "accountExplorer": "https://stellar.expert/explorer/testnet/contract/CAOG3AV5UGTIWJK5THLHCX74NNS5J7ZKK3TIXCGYFO4ELZUD6PCTIXPG",
+    "ali": "GBXB24ODZEP2UPCUQKSNE2IFEUGX6XJ3MWYYSSLNQPLQXEEBNG7E3A4J",
+    "ayse": "GB4OK2UJHOIYHEKZCDKLTTXWHBH3TPTZ7HGDVS3GNOH2DNM3ONWXOFGH",
+    "bob": "GAWOA5LRDZLDKFX4C2NFVTE232IA37RI2J2IODWTLIE2NFYUB4Z5TA7I"
+  },
+  "steps": [
+    {
+      "step": "mint",
+      "claim": "Ali mints test NFT #0",
+      "hash": "525ab92bc0d0760f79990afcb98dc9de5692a36992363d5d215f2692b7796ce8",
+      "explorer": "https://stellar.expert/explorer/testnet/tx/525ab92bc0d0760f79990afcb98dc9de5692a36992363d5d215f2692b7796ce8"
+    },
+    {
+      "step": "account_of",
+      "claim": "The registry returns the account address before the account exists",
+      "result": "CAOG3AV5UGTIWJK5THLHCX74NNS5J7ZKK3TIXCGYFO4ELZUD6PCTIXPG"
+    },
+    {
+      "step": "fund_before_deploy",
+      "claim": "Ali sends 20 XLM to the account address before the account contract exists",
+      "hash": "059825adeb032d36a41f261a4a3b1d6e9343b430badc52eac0f712842aaeb6d8",
+      "explorer": "https://stellar.expert/explorer/testnet/tx/059825adeb032d36a41f261a4a3b1d6e9343b430badc52eac0f712842aaeb6d8"
+    },
+    {
+      "step": "create_account",
+      "claim": "Bob, who does not own the NFT, deploys the account. Creating grants no control",
+      "hash": "6d44cc17309e6d19e9c47a8e0f301704f468e1bb1e26a72bcaa66c401e867e73",
+      "explorer": "https://stellar.expert/explorer/testnet/tx/6d44cc17309e6d19e9c47a8e0f301704f468e1bb1e26a72bcaa66c401e867e73"
+    },
+    {
+      "step": "balance_after_deploy",
+      "claim": "The 20 XLM sent before deployment are in the deployed account",
+      "result": "20 XLM"
+    },
+    {
+      "step": "path_a_owner_pays",
+      "claim": "Ali (NFT owner) pays 5 XLM from the account with execute",
+      "hash": "fea56ca3121cc12b137b90dabff11b5fcfabfb48434b21d68fc6901a3261f37c",
+      "explorer": "https://stellar.expert/explorer/testnet/tx/fea56ca3121cc12b137b90dabff11b5fcfabfb48434b21d68fc6901a3261f37c"
+    },
+    {
+      "step": "path_a_stranger_rejected",
+      "claim": "Bob signs and submits execute himself. The transaction fails on chain: the account requires the owner's signature",
+      "hash": "c60e663effddffdad574444ad0a51040c18f07907290602eb9a2a90644a4a757",
+      "explorer": "https://stellar.expert/explorer/testnet/tx/c60e663effddffdad574444ad0a51040c18f07907290602eb9a2a90644a4a757",
+      "result": "failed as expected; required signer: GBXB24ODZEP2UPCUQKSNE2IFEUGX6XJ3MWYYSSLNQPLQXEEBNG7E3A4J"
+    },
+    {
+      "step": "nft_transfer",
+      "claim": "Ali transfers the NFT to Ayşe. No Heybe transaction is involved",
+      "hash": "def7546f2275f0a5366cce19bf4ad89b90c6c0825191cc3c4e675553920bee4a",
+      "explorer": "https://stellar.expert/explorer/testnet/tx/def7546f2275f0a5366cce19bf4ad89b90c6c0825191cc3c4e675553920bee4a"
+    },
+    {
+      "step": "owner_after_transfer",
+      "claim": "The account now reports Ayşe as its owner",
+      "result": "GB4OK2UJHOIYHEKZCDKLTTXWHBH3TPTZ7HGDVS3GNOH2DNM3ONWXOFGH"
+    },
+    {
+      "step": "path_a_old_owner_rejected",
+      "claim": "Ali, the previous owner, signs execute. The transaction fails on chain: the account now requires Ayşe",
+      "hash": "39d6810105d0ac48235bdbe8cdb5351dc5f26922597abfde7c24540f3f3c2e8a",
+      "explorer": "https://stellar.expert/explorer/testnet/tx/39d6810105d0ac48235bdbe8cdb5351dc5f26922597abfde7c24540f3f3c2e8a",
+      "result": "failed as expected; required signer: GB4OK2UJHOIYHEKZCDKLTTXWHBH3TPTZ7HGDVS3GNOH2DNM3ONWXOFGH"
+    },
+    {
+      "step": "path_a_new_owner_pays",
+      "claim": "Ayşe (new owner) pays 5 XLM from the same account address",
+      "hash": "dc4a26a9c09581e096bf22e4fac0bfbf1f23f5b95f153f2e95a0c6c66125bf83",
+      "explorer": "https://stellar.expert/explorer/testnet/tx/dc4a26a9c09581e096bf22e4fac0bfbf1f23f5b95f153f2e95a0c6c66125bf83"
+    },
+    {
+      "step": "path_b_delegated",
+      "claim": "CAP-71: xlm.transfer(from = account) is authorized by the account's __check_auth. Ayşe's G key signs as the delegate; Bob only submits",
+      "hash": "a3792c79fa463912a5b0cbe74aad659e42886290dfbf08779e599329f95ec8b3",
+      "explorer": "https://stellar.expert/explorer/testnet/tx/a3792c79fa463912a5b0cbe74aad659e42886290dfbf08779e599329f95ec8b3"
+    },
+    {
+      "step": "path_b_old_owner_rejected",
+      "claim": "CAP-71 with Ali (previous owner) as the delegate is rejected",
+      "result": "Error(Auth, InvalidAction)"
+    },
+    {
+      "step": "guard_self_transfer",
+      "claim": "Sending the bound NFT into its own account through execute is blocked (SelfTransferBlocked = #3)",
+      "result": "Error(Contract, #3)"
+    },
+    {
+      "step": "lock",
+      "claim": "Ayşe locks the account until ledger 5656575 (about 2 minutes), as a seller would during a sale",
+      "hash": "9c65436e4a6cda0024785628c42546c5ed750911b3513e9caf6c2d1f2ada6845",
+      "explorer": "https://stellar.expert/explorer/testnet/tx/9c65436e4a6cda0024785628c42546c5ed750911b3513e9caf6c2d1f2ada6845"
+    },
+    {
+      "step": "locked_rejected",
+      "claim": "While locked, even the owner cannot spend (Locked = #1)",
+      "result": "Error(Contract, #1)"
+    },
+    {
+      "step": "state_counter",
+      "claim": "state() counts every execute, successful __check_auth and lock",
+      "result": "4"
+    },
+    {
+      "step": "final_balance",
+      "claim": "Account balance after the flow (20 - 5 - 5 - 2)",
+      "result": "8 XLM"
+    }
+  ]
+}
