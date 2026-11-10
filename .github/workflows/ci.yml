@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  contracts:
+    name: Contracts (test + wasm build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Skip until contracts exist
+        if: hashFiles('contracts/Cargo.toml') == ''
+        run: echo "No contracts/Cargo.toml yet; nothing to build."
+
+      - name: Install Rust
+        if: hashFiles('contracts/Cargo.toml') != ''
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32v1-none
+
+      - name: Cache cargo
+        if: hashFiles('contracts/Cargo.toml') != ''
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            contracts/target
+          key: cargo-${{ runner.os }}-${{ hashFiles('contracts/Cargo.lock') }}
+
+      - name: Test
+        if: hashFiles('contracts/Cargo.toml') != ''
+        run: cargo test --manifest-path contracts/Cargo.toml --locked
+
+      - name: Build wasm
+        if: hashFiles('contracts/Cargo.toml') != ''
+        run: cargo build --manifest-path contracts/Cargo.toml --target wasm32v1-none --release --locked
+
+  app:
+    name: Demo app (build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Skip until the app exists
+        if: hashFiles('app/package.json') == ''
+        run: echo "No app/package.json yet; nothing to build."
+
+      - name: Install Node
+        if: hashFiles('app/package.json') != ''
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install and build
+        if: hashFiles('app/package.json') != ''
+        working-directory: app
+        run: |
+          npm ci
+          npm run build
