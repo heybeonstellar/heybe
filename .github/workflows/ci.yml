@@ -21,6 +21,7 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: wasm32v1-none
+          components: clippy
 
       - name: Cache cargo
         if: hashFiles('contracts/Cargo.toml') != ''
@@ -32,13 +33,29 @@ jobs:
             contracts/target
           key: cargo-${{ runner.os }}-${{ hashFiles('contracts/Cargo.lock') }}
 
-      - name: Test
+      # soroban-sdk 28 only builds contract wasm through `stellar contract build`.
+      - name: Install stellar CLI
         if: hashFiles('contracts/Cargo.toml') != ''
-        run: cargo test --manifest-path contracts/Cargo.toml --locked
+        run: |
+          curl -sSL https://github.com/stellar/stellar-cli/releases/download/v28.0.0/stellar-cli-28.0.0-x86_64-unknown-linux-gnu.tar.gz \
+            | sudo tar -xz -C /usr/local/bin stellar
+          stellar --version
 
+      # The registry tests deploy the real account wasm, so build it first.
       - name: Build wasm
         if: hashFiles('contracts/Cargo.toml') != ''
-        run: cargo build --manifest-path contracts/Cargo.toml --target wasm32v1-none --release --locked
+        working-directory: contracts
+        run: stellar contract build
+
+      - name: Test
+        if: hashFiles('contracts/Cargo.toml') != ''
+        working-directory: contracts
+        run: cargo test --locked
+
+      - name: Clippy
+        if: hashFiles('contracts/Cargo.toml') != ''
+        working-directory: contracts
+        run: cargo clippy --all-targets --locked -- -D warnings
 
   app:
     name: Demo app (build)
